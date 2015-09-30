@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter.ttk import *
 
+__author__ = 'zhichen.dai'
+
 
 class TestUI(object):
     # _mode_value 发送模式

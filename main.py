@@ -2,6 +2,8 @@ from tkinter import *
 import ui
 import crawler
 
+__author__ = 'zhichen.dai'
+
 
 class CrawlerUI(ui.TestUI):
     def __init__(self, master=None):

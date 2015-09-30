@@ -4,6 +4,8 @@ import urllib.error
 import json
 import re
 
+__author__ = 'zhichen.dai'
+
 
 class Test(object):
     # 不将网址之中的以下字符转换，至少要有 ?=&
@@ -35,7 +37,7 @@ class Test(object):
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
-        #except Exception as e:
+        # except Exception as e:
         #    data['error'] = 2
         #    data['errmsg'] = e
         return data
