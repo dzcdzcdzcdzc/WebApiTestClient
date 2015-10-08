@@ -4,8 +4,6 @@ python:
   - "3.5"
 os:
   - linux
-  - osx
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install unity -y
-email: false
