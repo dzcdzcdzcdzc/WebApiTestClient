@@ -7,5 +7,5 @@ os:
   - osx
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install unity
+  - sudo apt-get install unity -y
 email: false
