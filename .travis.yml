@@ -7,3 +7,9 @@ os:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install unity -y
+install:
+  - pip install tkinter
+script:
+  - python main.py
+notifications:
+    email: false
