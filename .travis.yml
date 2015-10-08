@@ -3,3 +3,6 @@ python:
   - "3.4"
   - "3.5"
 install: true
+script:
+  - python main.py
+email: false
