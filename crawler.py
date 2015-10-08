@@ -37,9 +37,9 @@ class Test(object):
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
-        # except Exception as e:
-        #    data['error'] = 2
-        #    data['errmsg'] = e
+        except Exception as e:
+            data['error'] = 2
+            data['errmsg'] = e
         return data
 
     def post(self, post_url, post, header, timeout=120):
