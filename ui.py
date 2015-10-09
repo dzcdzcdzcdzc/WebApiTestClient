@@ -33,8 +33,8 @@ class TestUI(object):
         self.console_frame()
         # 生成结果框架
         result_frame = Frame()
-        self._header_text = Text(result_frame, width=1)
-        self._body_text = Text(result_frame, width=1)
+        self._header_text = Text(result_frame, state="disabled", width=1)
+        self._body_text = Text(result_frame, state="disable", width=1)
         result_frame.pack(side=BOTTOM, expand=YES, fill=BOTH)
         self._header_text.pack(side=LEFT, expand=YES, fill=BOTH)
         self._body_text.pack(side=RIGHT, expand=YES, fill=BOTH)

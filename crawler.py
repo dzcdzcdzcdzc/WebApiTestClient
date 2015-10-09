@@ -15,25 +15,25 @@ class Test(object):
 
     # get请求
     # @param get_url get请求地址
+    # @param header header头
     # @param timeout 超时时间
     def get(self, get_url, header, timeout=120):
         data = {}
         try:
             data['error'] = 0
             req = urllib.request.Request(self.quote_url(get_url))
-            if header != {}:
-                for k, v in header.items():
-                    req.add_header(k.lower(), v)
-            urlopen = urllib.request.urlopen(req, timeout=timeout)
-            # 发送包的头文件
-            data['info'] = "发送包的头文件：\n"
-            for k, v in req.header_items():
-                data['info'] += k + ": " + v + "\n"
-            data['info'] += "\n"
-            # 接收包的头文件
-            data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
-            data['read'] = urlopen.read()
-            data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
+            for k, v in header.items():
+                req.add_header(k.lower(), v)
+            with urllib.request.urlopen(req, timeout=timeout) as urlopen:
+                # 发送包的头文件
+                data['info'] = "发送包的头文件：\n"
+                for k, v in req.header_items():
+                    data['info'] += k + ": " + v + "\n"
+                data['info'] += "\n"
+                # 接收包的头文件
+                data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
+                data['read'] = urlopen.read()
+                data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
@@ -42,6 +42,11 @@ class Test(object):
             data['errmsg'] = e
         return data
 
+    # post请求
+    # @param get_url post请求地址
+    # @param post post内容
+    # @param header header头
+    # @param timeout 超时时间
     def post(self, post_url, post, header, timeout=120):
         data = {}
         try:
@@ -49,21 +54,18 @@ class Test(object):
             post = urllib.parse.urlencode(post)
             post = post.encode('utf-8')
             req = urllib.request.Request(self.quote_url(post_url), data=post, method='POST')
-            if header == {}:
-                urlopen = urllib.request.urlopen(req, timeout=timeout)
-            else:
-                for k, v in header.items():
-                    req.add_header(k.lower(), v)
-                urlopen = urllib.request.urlopen(req, timeout=timeout)
-            # 发送包的头文件
-            data['info'] = "发送包的头文件：\n"
-            for k, v in req.header_items():
-                data['info'] += k + ": " + v + "\n"
-            data['info'] += "\n"
-            # 接收包的头文件
-            data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
-            data['read'] = urlopen.read()
-            data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
+            for k, v in header.items():
+                req.add_header(k.lower(), v)
+            with urllib.request.urlopen(req, timeout=timeout) as urlopen:
+                # 发送包的头文件
+                data['info'] = "发送包的头文件：\n"
+                for k, v in req.header_items():
+                    data['info'] += k + ": " + v + "\n"
+                data['info'] += "\n"
+                # 接收包的头文件
+                data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
+                data['read'] = urlopen.read()
+                data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
@@ -84,9 +86,10 @@ class Test(object):
         quote_url = '//'.join(quote_url)
         return quote_url
 
-    # Sample Text去除网页中的开头的bom和结尾的回车空格
+    # 去除网页中的开头的bom和结尾的回车空格
     # @param word 过滤文字
-    def filter(self, word, msg):
+    @staticmethod
+    def filter(word, msg):
         r = re.compile(r"^\s+")
         if re.search(r, word) is not None:
             msg += "网页开头含有非空字符\n"
@@ -128,9 +131,9 @@ class Test(object):
 if __name__ == '__main__':
     Test = Test()
     url = "http://localhost/work/phptext/error.php?id=1&name=的"
-    post_data = {'spam': 1, 'eggs': 2, 'bacon': 0}
+    post_data = {'int': 1, 'str': 'string'}
     a = Test.post(url, post_data, {})
     if a['error'] == 0:
-        print(a['read'] + "\n", "msg" + a['msg'] + "\n", "err" + a['errmsg'] + "\n")
+        print(a['read'] + "\n", "msg\n" + a['msg'] + "\n", "err\n" + a['errmsg'] + "\n")
     else:
         print(a['errmsg'])
