@@ -1,3 +1,7 @@
+Listen 8000
+
+ServerName 127.0.0.1
+
 <VirtualHost *:8000>
   # [...]
 
