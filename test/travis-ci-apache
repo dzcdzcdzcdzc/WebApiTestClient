@@ -1,0 +1,14 @@
+<VirtualHost *:8000>
+  # [...]
+
+  DocumentRoot %TRAVIS_BUILD_DIR%/test
+
+  <Directory "%TRAVIS_BUILD_DIR%/test">
+    Options FollowSymLinks MultiViews ExecCGI
+    AllowOverride All
+    Order deny,allow
+    Allow from all
+  </Directory>
+
+  # [...]
+</VirtualHost>
