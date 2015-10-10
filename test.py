@@ -7,7 +7,7 @@ __author__ = 'zhichen.dai'
 
 class TestCrawlerMethods(unittest.TestCase, crawler.Test):
     def test_get(self):
-        get = self.get('http://127.0.0.1:8000/test/test.php', {})
+        get = self.get('http://127.0.0.1:8000/test.php', {})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
         self.assertEqual(json.loads(get['read']), {'COOKIE': [], 'POST': [], 'GET': [],
@@ -18,7 +18,7 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         self.assertEqual(get['errmsg'], "")
 
     def test_get_header(self):
-        get = self.get('http://127.0.0.1:8000/test/test.php', {'header': 'header'})
+        get = self.get('http://127.0.0.1:8000/test.php', {'header': 'header'})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
         self.assertEqual(json.loads(get['read']), {'GET': [], 'COOKIE': [], 'POST': [],
@@ -29,7 +29,7 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         self.assertEqual(get['errmsg'], "")
 
     def test_post(self):
-        post = self.post('http://127.0.0.1:8000/test/test.php', {'post': 'post'}, {})
+        post = self.post('http://127.0.0.1:8000/test.php', {'post': 'post'}, {})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
         self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
@@ -40,7 +40,7 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         self.assertEqual(post['errmsg'], "")
 
     def test_post_header(self):
-        post = self.post('http://127.0.0.1:8000/test/test.php', {'post': 'post'}, {'header': 'header'})
+        post = self.post('http://127.0.0.1:8000/test.php', {'post': 'post'}, {'header': 'header'})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
         self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
@@ -52,7 +52,7 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         self.assertEqual(post['errmsg'], "")
 
     def test_get_error(self):
-        get = self.get('http://127.0.0.1:8000/test/error.php', {})
+        get = self.get('http://127.0.0.1:8000/error.php', {})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
         self.assertEqual(json.loads(get['read']), {'COOKIE': [], 'POST': [], 'GET': [],
@@ -63,7 +63,7 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         self.assertEqual(get['errmsg'], "")
 
     def test_post_error(self):
-        post = self.post('http://127.0.0.1:8000/test/error.php', {'post': 'post'}, {})
+        post = self.post('http://127.0.0.1:8000/error.php', {'post': 'post'}, {})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
         self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
