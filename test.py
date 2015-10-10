@@ -1,8 +1,12 @@
 import unittest
 import json
+import re
 import crawler
 
 __author__ = 'zhichen.dai'
+
+# 准备正则表达式
+r = re.compile(r"^Python-urllib/3\.[0-9]$")
 
 
 class TestCrawlerMethods(unittest.TestCase, crawler.Test):
@@ -10,10 +14,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         get = self.get('http://127.0.0.1:8000/test.php', {})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
-        self.assertEqual(json.loads(get['read']), {'COOKIE': [], 'POST': [], 'GET': [],
-                                                   'HEADER': {'ACCEPT_ENCODING': 'identity', 'HOST': '127.0.0.1:8000',
-                                                              'USER_AGENT': 'Python-urllib/3.4',
-                                                              'CONNECTION': 'close'}})
+        json_test = json.loads(get['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test,
+                         {'HEADER': {'CONNECTION': 'close', 'HOST': '127.0.0.1:8000', 'ACCEPT_ENCODING': 'identity'},
+                          'POST': [], 'GET': [], 'COOKIE': []})
         self.assertEqual(get['msg'], "")
         self.assertEqual(get['errmsg'], "")
 
@@ -21,10 +26,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         get = self.get('http://127.0.0.1:8000/test.php', {'header': 'header'})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
-        self.assertEqual(json.loads(get['read']), {'GET': [], 'COOKIE': [], 'POST': [],
-                                                   'HEADER': {'HEADER': 'header', 'CONNECTION': 'close',
-                                                              'HOST': '127.0.0.1:8000', 'ACCEPT_ENCODING': 'identity',
-                                                              'USER_AGENT': 'Python-urllib/3.4'}})
+        json_test = json.loads(get['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test,
+                         {'HEADER': {'HEADER': 'header', 'ACCEPT_ENCODING': 'identity', 'HOST': '127.0.0.1:8000',
+                                     'CONNECTION': 'close'}, 'COOKIE': [], 'GET': [], 'POST': []})
         self.assertEqual(get['msg'], "")
         self.assertEqual(get['errmsg'], "")
 
@@ -32,10 +38,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         post = self.post('http://127.0.0.1:8000/test.php', {'post': 'post'}, {})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
-        self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
-                                                    'HEADER': {'CONNECTION': 'close', 'ACCEPT_ENCODING': 'identity',
-                                                               'USER_AGENT': 'Python-urllib/3.4',
-                                                               'HOST': '127.0.0.1:8000'}, 'COOKIE': [], 'GET': []})
+        json_test = json.loads(post['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test, {'GET': [], 'HEADER': {'HOST': '127.0.0.1:8000', 'CONNECTION': 'close',
+                                                           'ACCEPT_ENCODING': 'identity'}, 'COOKIE': [],
+                                     'POST': {'post': 'post'}})
         self.assertEqual(post['msg'], "")
         self.assertEqual(post['errmsg'], "")
 
@@ -43,11 +50,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         post = self.post('http://127.0.0.1:8000/test.php', {'post': 'post'}, {'header': 'header'})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
-        self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
-                                                    'HEADER': {'ACCEPT_ENCODING': 'identity', 'CONNECTION': 'close',
-                                                               'HOST': '127.0.0.1:8000', 'HEADER': 'header',
-                                                               'USER_AGENT': 'Python-urllib/3.4'}, 'COOKIE': [],
-                                                    'GET': []})
+        json_test = json.loads(post['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test, {'GET': [], 'HEADER': {'HOST': '127.0.0.1:8000', 'ACCEPT_ENCODING': 'identity',
+                                                           'HEADER': 'header', 'CONNECTION': 'close'},
+                                     'POST': {'post': 'post'}, 'COOKIE': []})
         self.assertEqual(post['msg'], "")
         self.assertEqual(post['errmsg'], "")
 
@@ -55,10 +62,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         get = self.get('http://127.0.0.1:8000/error.php', {})
         self.assertTrue(isinstance(get, dict))
         self.assertEqual(get['error'], 0)
-        self.assertEqual(json.loads(get['read']), {'COOKIE': [], 'POST': [], 'GET': [],
-                                                   'HEADER': {'ACCEPT_ENCODING': 'identity', 'HOST': '127.0.0.1:8000',
-                                                              'USER_AGENT': 'Python-urllib/3.4',
-                                                              'CONNECTION': 'close'}})
+        json_test = json.loads(get['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test, {'COOKIE': [], 'POST': [], 'GET': [],
+                                     'HEADER': {'ACCEPT_ENCODING': 'identity', 'HOST': '127.0.0.1:8000',
+                                                'CONNECTION': 'close'}})
         self.assertFalse(get['msg'] == "")
         self.assertEqual(get['errmsg'], "")
 
@@ -66,10 +74,11 @@ class TestCrawlerMethods(unittest.TestCase, crawler.Test):
         post = self.post('http://127.0.0.1:8000/error.php', {'post': 'post'}, {})
         self.assertTrue(isinstance(post, dict))
         self.assertEqual(post['error'], 0)
-        self.assertEqual(json.loads(post['read']), {'POST': {'post': 'post'},
-                                                    'HEADER': {'CONNECTION': 'close', 'ACCEPT_ENCODING': 'identity',
-                                                               'USER_AGENT': 'Python-urllib/3.4',
-                                                               'HOST': '127.0.0.1:8000'}, 'COOKIE': [], 'GET': []})
+        json_test = json.loads(post['read'])
+        self.assertTrue(re.match(r, json_test['HEADER'].pop('USER_AGENT')) is not None)
+        self.assertEqual(json_test, {'COOKIE': [], 'POST': {'post': 'post'},
+                                     'HEADER': {'HOST': '127.0.0.1:8000', 'CONNECTION': 'close',
+                                                'ACCEPT_ENCODING': 'identity'}, 'GET': []})
         self.assertFalse(post['msg'] == "")
         self.assertEqual(post['errmsg'], "")
 

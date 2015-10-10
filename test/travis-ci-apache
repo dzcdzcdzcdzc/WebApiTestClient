@@ -3,7 +3,6 @@ Listen 8000
 ServerName 127.0.0.1
 
 <VirtualHost *:8000>
-  # [...]
 
   DocumentRoot %TRAVIS_BUILD_DIR%
 
@@ -14,5 +13,4 @@ ServerName 127.0.0.1
     Allow from all
   </Directory>
 
-  # [...]
 </VirtualHost>
