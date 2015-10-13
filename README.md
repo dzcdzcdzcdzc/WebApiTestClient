@@ -33,10 +33,10 @@ windows环境下，启动时希望已最大化方式打开，就在main.py倒数
 ## 界面
 
 ubuntu:
-![ubuntu](http://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/ubuntu.bmp)
+![ubuntu](https://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/ubuntu.bmp)
 
 win7:
-![win7](http://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/win7.bmp)
+![win7](https://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/win7.bmp)
 
 ## 未来
  - 提交请求时会造成短暂的阻塞，计划使用协程解决。届时或许不再支持python3.3
