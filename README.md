@@ -1,7 +1,7 @@
 # WebApiTestClient
 
 <!-- BADGES/ -->
-[![Python Version](https://img.shields.io/badge/python-3.3%2C%203.4%2C%203.5-blue.svg)]
+![Python Version](https://img.shields.io/badge/python-3.3%2C%203.4%2C%203.5-blue.svg)
 [![Build Status](https://travis-ci.org/dzcdzcdzcdzc/WebApiTestClient.svg?branch=master)](https://travis-ci.org/dzcdzcdzcdzc/WebApiTestClient)
 [![Code Climate](https://codeclimate.com/github/dzcdzcdzcdzc/WebApiTestClient/badges/gpa.svg)](https://codeclimate.com/github/dzcdzcdzcdzc/WebApiTestClient)
 [![Test Coverage](https://codeclimate.com/github/dzcdzcdzcdzc/WebApiTestClient/badges/coverage.svg)](https://codeclimate.com/github/dzcdzcdzcdzc/WebApiTestClient/coverage)
