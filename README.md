@@ -9,7 +9,9 @@
 ## 简介
 python3编写的web api测试工具。使用官方库，安装完python环境包可以直接使用。
 
-启动时不希望已最大化方式打开，就删除main.py中的
+ubuntu默认需安装tkinter，需运行apt-get install python3-tk -y
+
+windows环境下，启动时希望已最大化方式打开，就在main.py倒数第一行前添加
 
     root.wm_state('zoomed')
 
@@ -24,13 +26,21 @@ python3编写的web api测试工具。使用官方库，安装完python环境包
  - [ ] delete
 
 ## 特点
-- 允许输入的url带有中文
-- 返回的结果如果是json，格式化输出
-- 返回的结果开头出现BOM、结束出现空格和回车时，提出警告
+ - 允许输入的url带有中文
+ - 返回的结果如果是json，格式化输出
+ - 返回的结果开头出现BOM、结束出现空格和回车时，提出警告
+
+## 界面
+
+ubuntu:
+![ubuntu](http://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/ubuntu.bmp)
+
+win7:
+![win7](http://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/win7.bmp)
 
 ## 未来
-- 提交请求时会造成短暂的阻塞，计划使用协程解决。届时或许不再支持python3.3
-- 加入更多请求功能
+ - 提交请求时会造成短暂的阻塞，计划使用协程解决。届时或许不再支持python3.3
+ - 加入更多请求功能
 
 ## 许可
 The MIT License (MIT) http://opensource.org/licenses/MIT

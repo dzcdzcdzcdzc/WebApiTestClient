@@ -43,13 +43,13 @@ class CrawlerUI(ui.TestUI):
             self._header_text.insert(END, get['msg'] + "\n")
             self._header_text.insert(END, get['errmsg'] + "\n")
             self._body_text.insert(END, get['read'])
-        if get['error'] == 1:
+        elif get['error'] == 1:
             self._header_text.insert(END, "致命错误：连接出错\n"
-                                          "1.检查是否是类似http://开头\n"
+                                          "1.检查URL是否是类似http://开头\n"
                                           "2.检查输入的地址是否正确\n"
-                                          "3.检查输入的HEADER是否正确\n")
+                                          "3.HEADER中不允许有中文字符\n")
             self._header_text.insert(END, get['errmsg'])
-        if get['error'] == 2:
+        elif get['error'] == 2:
             self._header_text.insert(END, "致命错误：程序出错\n")
             self._header_text.insert(END, get['errmsg'])
 
@@ -62,14 +62,14 @@ class CrawlerUI(ui.TestUI):
             self._header_text.insert(END, post['msg'] + "\n")
             self._header_text.insert(END, post['errmsg'] + "\n")
             self._body_text.insert(END, post['read'])
-        if post['error'] == 1:
+        elif post['error'] == 1:
             self._header_text.insert(END, "致命错误：连接出错\n"
-                                          "1.检查是否是类似http://开头\n"
+                                          "1.检查URL是否是类似http://开头\n"
                                           "2.检查输入的地址是否正确\n"
                                           "3.检查输入的POST是否正确\n"
                                           "4.HEADER中不允许有中文字符\n")
             self._header_text.insert(END, post['errmsg'])
-        if post['error'] == 2:
+        elif post['error'] == 2:
             self._header_text.insert(END, "致命错误：程序出错\n")
             self._header_text.insert(END, post['errmsg'])
 
