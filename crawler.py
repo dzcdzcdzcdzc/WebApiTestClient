@@ -17,23 +17,14 @@ class Test(object):
     # @param get_url get请求地址
     # @param header header头
     # @param timeout 超时时间
-    def get(self, get_url, header, timeout=120):
+    def get(self, get_url, header):
         data = {}
         try:
             data['error'] = 0
             req = urllib.request.Request(self.quote_url(get_url))
             for k, v in header.items():
                 req.add_header(k.lower(), v)
-            with urllib.request.urlopen(req, timeout=timeout) as urlopen:
-                # 发送包的头文件
-                data['info'] = "发送包的头文件：\n"
-                for k, v in req.header_items():
-                    data['info'] += k + ": " + v + "\n"
-                data['info'] += "\n"
-                # 接收包的头文件
-                data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
-                data['read'] = urlopen.read()
-                data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
+            dict(data, **self.request(data, req))
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
@@ -47,7 +38,7 @@ class Test(object):
     # @param post post内容
     # @param header header头
     # @param timeout 超时时间
-    def post(self, post_url, post, header, timeout=120):
+    def post(self, post_url, post, header):
         data = {}
         try:
             data['error'] = 0
@@ -56,22 +47,29 @@ class Test(object):
             req = urllib.request.Request(self.quote_url(post_url), data=post, method='POST')
             for k, v in header.items():
                 req.add_header(k.lower(), v)
-            with urllib.request.urlopen(req, timeout=timeout) as urlopen:
-                # 发送包的头文件
-                data['info'] = "发送包的头文件：\n"
-                for k, v in req.header_items():
-                    data['info'] += k + ": " + v + "\n"
-                data['info'] += "\n"
-                # 接收包的头文件
-                data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
-                data['read'] = urlopen.read()
-                data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
+            dict(data, **self.request(data, req))
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
             data['errmsg'] = e
         except Exception as e:
             data['error'] = 2
             data['errmsg'] = e
+        return data
+
+    # 发送请求
+    # @param 信息内容
+    # @param 请求类型、内容
+    def request(self, data, req):
+        with urllib.request.urlopen(req) as urlopen:
+            # 发送包的头文件
+            data['info'] = "发送包的头文件：\n"
+            for k, v in req.header_items():
+                data['info'] += k + ": " + v + "\n"
+            data['info'] += "\n"
+            # 接收包的头文件
+            data['info'] += "接收包的头文件：\n" + str(urlopen.info()) + "\n"
+            data['read'] = urlopen.read()
+            data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
         return data
 
     # 转换url中的中文字符
