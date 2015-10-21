@@ -1,4 +1,5 @@
 from tkinter import *
+import platform
 import ui
 import crawler
 
@@ -89,5 +90,7 @@ if __name__ == '__main__':
     root.title("接口测试工具")
     CrawlerUI(master=root)
     root.minsize(450, 240)
-    root.wm_state('zoomed')
+    sys = platform.system()
+    if sys == "Windows":
+        root.wm_state('zoomed')
     root.mainloop()

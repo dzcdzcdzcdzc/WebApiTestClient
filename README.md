@@ -11,9 +11,10 @@ python3编写的web api测试工具。使用官方库，安装完python环境包
 
 ubuntu默认需安装tkinter，需运行apt-get install python3-tk -y
 
-windows环境下，启动时希望已最大化方式打开，就在main.py倒数第一行前添加
+windows环境下，启动时不希望已最大化方式打开，就删除main.py倒数第二、第三行的
 
-    root.wm_state('zoomed')
+    if sys == "Windows":
+        root.wm_state('zoomed')
 
 使用时将main.py重命名成main.pyw，启动时不会出现console。
 
