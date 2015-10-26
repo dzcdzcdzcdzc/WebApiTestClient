@@ -21,51 +21,32 @@ class CrawlerUI(ui.TestUI):
         if self._mode_value == 'GET':
             # 读取参数发送
             header = self.get_dict(self._header_key, self._header_value)
-            get = self.test.get(url, header)
-            self.text_state(self.get_result, get)
+            dict_result = self.test.get(url, header)
         elif self._mode_value == 'POST':
             # 读取参数发送
             post = self.get_dict(self._key_entry, self._value_entry)
             header = self.get_dict(self._header_key, self._header_value)
-            post = self.test.post(url, post, header)
-            self.text_state(self.post_result, post)
+            dict_result = self.test.post(url, post, header)
+        else:
+            return
+        self.result(dict_result)
 
-    # 模拟成修饰符
-    def text_state(self, fun, mode):
-        self._header_text.configure(state="normal")
-        self._body_text.configure(state="normal")
-        fun(mode)
-        self._header_text.configure(state="disabled")
-        self._body_text.configure(state="disabled")
-
-    # 写入get结果到UI
-    def get_result(self, get):
+    # 写入结果到UI
+    def result(self, dict_result):
         self.clear_text()
-        if get['error'] == 0:
-            self.insert_text(get)
-        elif get['error'] == 1:
-            self._header_text.insert(END, "致命错误：连接出错\n"
-                                          "1.检查输入的地址是否正确\n"
-                                          "2.HEADER中不允许有中文字符\n")
-            self._header_text.insert(END, get['errmsg'])
-        elif get['error'] == 2:
-            self._header_text.insert(END, "致命错误：程序出错\n")
-            self._header_text.insert(END, get['errmsg'])
-
-    # 写入post结果到UI
-    def post_result(self, post):
-        self.clear_text()
-        if post['error'] == 0:
-            self.insert_text(post)
-        elif post['error'] == 1:
+        if dict_result['error'] == 0:
+            pass
+        elif dict_result['error'] == 1:
             self._header_text.insert(END, "致命错误：连接出错\n"
                                           "1.检查输入的地址是否正确\n"
                                           "2.检查输入的POST是否正确\n"
-                                          "3.HEADER中不允许有中文字符\n")
-            self._header_text.insert(END, post['errmsg'])
-        elif post['error'] == 2:
+                                          "2.HEADER中不允许有中文字符\n")
+        elif dict_result['error'] == 2:
+            self._header_text.insert(END, "致命错误：解析出错\n"
+                                          "1.无法解析返回的状态")
+        elif dict_result['error'] == 99:
             self._header_text.insert(END, "致命错误：程序出错\n")
-            self._header_text.insert(END, post['errmsg'])
+        self.insert_text(dict_result)
 
     # 传入key和value的text对象获取字典值
     @staticmethod

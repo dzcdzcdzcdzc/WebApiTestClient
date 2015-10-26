@@ -33,11 +33,14 @@ class TestUI(object):
         self.console_frame()
         # 生成结果框架
         result_frame = Frame()
-        self._header_text = Text(result_frame, state="disabled", width=1)
-        self._body_text = Text(result_frame, state="disable", width=1)
+        self._header_text = Text(result_frame, state="normal", width=1)
+        self._body_text = Text(result_frame, state="normal", width=1)
         result_frame.pack(side=BOTTOM, expand=YES, fill=BOTH)
         self._header_text.pack(side=LEFT, expand=YES, fill=BOTH)
         self._body_text.pack(side=RIGHT, expand=YES, fill=BOTH)
+        # 禁止文本框输入
+        self._header_text.bind("<KeyPress>", lambda e: "break")
+        self._body_text.bind("<KeyPress>", lambda e: "break")
 
     def console_frame(self):
         # 模式和url行
@@ -61,7 +64,7 @@ class TestUI(object):
         # 提交按钮行
         submit_frame = Frame(self.root)
         header_check = IntVar()
-        header = Checkbutton(submit_frame, variable=header_check, text="包含header", width=10,
+        header = Checkbutton(submit_frame, variable=header_check, text="包含HEADER", width=15,
                              command=(lambda: self.header_change(header_check.get(), header_frame)))
         submit_frame.pack(side=TOP, fill=X)
         header.pack(side=LEFT)
@@ -76,15 +79,7 @@ class TestUI(object):
     def mode_change(self, mode_value, value_frame):
         self._mode_value = mode_value
         if self._mode_value == 'GET':
-            while 1:
-                if value_frame.children:
-                    value_frame.children.popitem()[1].destroy()
-                else:
-                    break
-            self._key_entry.clear()
-            self._value_entry.clear()
-            self._value_del_button.clear()
-            value_frame.configure(height=1)
+            self.del_all_value(value_frame, "POST")
         elif self._mode_value == 'POST':
             if not value_frame.children:
                 row_value = Frame(value_frame)
@@ -103,15 +98,7 @@ class TestUI(object):
     def header_change(self, header_check, header_frame):
         self._header_check = header_check
         if self._header_check == 0:
-            while 1:
-                if header_frame.children:
-                    header_frame.children.popitem()[1].destroy()
-                else:
-                    break
-            self._header_key.clear()
-            self._header_value.clear()
-            self._header_del_button.clear()
-            header_frame.configure(height=1)
+            self.del_all_value(header_frame, "HEADER")
         elif self._header_check == 1:
             if not header_frame.children:
                 row_value = Frame(header_frame)
@@ -150,7 +137,7 @@ class TestUI(object):
                                                       key_entry, value_entry, delete_button)))
         self.button_disable(value_frame, key_entry, value_entry, delete_button)
 
-    # 删除一整行
+    # 删除一行输入框
     # @param value_frame 删除一行的value_frame对象
     # @param button 触发此方法的删除按钮对象
     # @param key_entry key值文本框对象的数组
@@ -163,6 +150,27 @@ class TestUI(object):
             widget in delete_button and delete_button.remove(widget)
         button.master.destroy()
         self.button_disable(value_frame, key_entry, value_entry, delete_button)
+
+    # 删除一整块输入框
+    # @param frame 删除所有输入框的frame
+    # @param mode 清除mode的变量
+    def del_all_value(self, frame, mode):
+        if mode == "POST":
+            self._key_entry.clear()
+            self._value_entry.clear()
+            self._value_del_button.clear()
+        elif mode == "HEADER":
+            self._header_key.clear()
+            self._header_value.clear()
+            self._header_del_button.clear()
+        else:
+            return False
+        while 1:
+            if frame.children:
+                frame.children.popitem()[1].destroy()
+            else:
+                break
+        frame.configure(height=1)
 
     # 判断删除按钮是否应该禁用
     # @param value_frame 一群删除按钮所在的frame的对象

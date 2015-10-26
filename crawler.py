@@ -1,3 +1,4 @@
+import http.client
 import urllib.request
 import urllib.parse
 import urllib.error
@@ -18,19 +19,21 @@ class Test(object):
     # @param header header头
     # @param timeout 超时时间
     def get(self, get_url, header):
-        data = {}
+        data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
-            data['error'] = 0
             req = urllib.request.Request(self.quote_url(get_url))
             for k, v in header.items():
                 req.add_header(k.lower(), v)
             dict(data, **self.request(data, req))
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
-            data['errmsg'] = e
-        except Exception as e:
+            data['errmsg'] = str(e)
+        except http.client.BadStatusLine as e:
             data['error'] = 2
-            data['errmsg'] = e
+            data['read'] = '' if str(e) == "''" else str(e)
+        except Exception as e:
+            data['error'] = 99
+            data['errmsg'] = str(e)
         return data
 
     # post请求
@@ -39,7 +42,7 @@ class Test(object):
     # @param header header头
     # @param timeout 超时时间
     def post(self, post_url, post, header):
-        data = {}
+        data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
             data['error'] = 0
             post = urllib.parse.urlencode(post)
@@ -50,10 +53,13 @@ class Test(object):
             dict(data, **self.request(data, req))
         except (urllib.error.URLError, ValueError) as e:
             data['error'] = 1
-            data['errmsg'] = e
-        except Exception as e:
+            data['errmsg'] = str(e)
+        except http.client.BadStatusLine as e:
             data['error'] = 2
-            data['errmsg'] = e
+            data['read'] = '' if str(e) == "''" else str(e)
+        except Exception as e:
+            data['error'] = 99
+            data['errmsg'] = str(e)
         return data
 
     # 发送请求
