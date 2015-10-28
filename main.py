@@ -28,7 +28,7 @@ class CrawlerUI(ui.TestUI):
             header = self.get_dict(self._header_key, self._header_value)
             dict_result = self.test.post(url, post, header)
         else:
-            return
+            raise ValueError
         self.result(dict_result)
 
     # 写入结果到UI

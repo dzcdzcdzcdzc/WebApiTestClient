@@ -102,7 +102,7 @@ class Test(object):
         if re.search(r, word) is not None:
             msg += "网页末尾有非空字符\n"
             word = re.sub(r, "", word)
-        return [word, msg]
+        return word, msg
 
     # 解析json字符串
     def decode_json(self, read):
@@ -129,7 +129,7 @@ class Test(object):
         except Exception as e:
             msg += "解析原网页，出现非致命错误："
             errmsg = e
-        return [read, msg, str(errmsg)]
+        return read, msg, str(errmsg)
 
 
 if __name__ == '__main__':
