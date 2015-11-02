@@ -34,6 +34,7 @@ class TestUI(object):
 
     def __init__(self, master=None):
         self.root = master
+        # 生成控制框架
         self.console_frame()
         # 生成结果框架
         result_frame = Frame()
@@ -83,17 +84,11 @@ class TestUI(object):
     def mode_change(self, mode_value, value_frame):
         self._mode_value = mode_value
         if self._mode_value == 'GET':
-            self.del_all_value(value_frame, "POST")
+            self.del_all_value(value_frame, self.mode_row)
         elif self._mode_value == 'POST':
             if not value_frame.children:
-                row_value = Frame(value_frame)
-                row_value.pack(side=TOP, fill=X)
-                post_label = Label(row_value, text="POST:")
-                post_label.pack(side=LEFT)
-                add_button = Button(row_value, text="添加", width=5,
-                                    command=(lambda: self.add_value(value_frame, self.mode_row)))
+                self.add_all_value(value_frame, "POST:", self.mode_row)
                 self.add_value(value_frame, self.mode_row)
-                add_button.pack(side=RIGHT)
         else:
             raise ValueError
 
@@ -103,17 +98,11 @@ class TestUI(object):
     def header_change(self, header_check, header_frame):
         self._header_check = header_check
         if self._header_check == 0:
-            self.del_all_value(header_frame, "HEADER")
+            self.del_all_value(header_frame, self.header_row)
         elif self._header_check == 1:
             if not header_frame.children:
-                row_value = Frame(header_frame)
-                row_value.pack(side=TOP, fill=X)
-                post_label = Label(row_value, text="header:")
-                post_label.pack(side=LEFT)
-                add_button = Button(row_value, text="添加", width=5,
-                                    command=(lambda: self.add_value(header_frame, self.header_row)))
+                self.add_all_value(header_frame, "HEADER:", self.header_row)
                 self.add_value(header_frame, self.header_row)
-                add_button.pack(side=RIGHT)
 
     # 增加一行输入框
     # @param value_frame 增加一行的value_frame对象
@@ -153,20 +142,25 @@ class TestUI(object):
         button.master.destroy()
         self.button_disable(value_frame, (key_entry, value_entry, delete_button))
 
+    # 增加一行添加按钮行
+    # @param frame 增加一行的frame
+    # @param text 显示的说明文字
+    # @param row 键、值文本框和删除按钮对象的元组
+    def add_all_value(self, frame, text, row):
+        row_value = Frame(frame)
+        row_value.pack(side=TOP, fill=X)
+        post_label = Label(row_value, text=text)
+        post_label.pack(side=LEFT)
+        add_button = Button(row_value, text="添加", width=5, command=(lambda: self.add_value(frame, row)))
+        add_button.pack(side=RIGHT)
+
     # 删除一整块输入框
     # @param frame 删除所有输入框的frame
-    # @param mode 清除mode的变量
-    def del_all_value(self, frame, mode):
-        if mode == "POST":
-            self._key_entry.clear()
-            self._value_entry.clear()
-            self._value_del_button.clear()
-        elif mode == "HEADER":
-            self._header_key.clear()
-            self._header_value.clear()
-            self._header_del_button.clear()
-        else:
-            raise ValueError
+    # @param row 要清除键、值文本框和删除按钮对象的元组
+    @staticmethod
+    def del_all_value(frame, row):
+        for v in row:
+            v.clear()
         while 1:
             if frame.children:
                 frame.children.popitem()[1].destroy()
@@ -176,9 +170,7 @@ class TestUI(object):
 
     # 判断删除按钮是否应该禁用
     # @param value_frame 一群删除按钮所在的frame的对象
-    # @param key_entry key值文本框对象的数组
-    # @param value_entry value值文本框对象的数组
-    # @param delete_button 删除按钮的对象的数组
+    # @param row 键、值文本框和删除按钮对象的元组
     def button_disable(self, value_frame, row):
         key_entry, value_entry, delete_button = row
         if len(delete_button) > 1:
