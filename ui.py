@@ -10,17 +10,21 @@ class TestUI(object):
     # _key_entry 参数框架的key值文本框对象
     # _value_entry 参数框架的value值文本框对象
     # _value_del_button 参数框架的删除按钮，为了简化“判断删除按钮是否应该禁用”
+    # mode_row 打包上面对象，传参使用
     _key_entry = []
     _value_entry = []
     _value_del_button = []
+    mode_row = (_key_entry, _value_entry, _value_del_button)
     # _header_check 发送header复选框
     _header_check = 0
     # _key_entry HEADER框架的key值文本框对象
     # _value_entry HEADER框架的value值文本框对象
     # _value_del_button HEADER框架的删除按钮
+    # header_row 打包上面对象，传参使用
     _header_key = []
     _header_value = []
     _header_del_button = []
+    header_row = (_header_key, _header_value, _header_del_button)
     # url文本框对象
     _url_entry = object
     # 下方左边文本框对象
@@ -87,10 +91,11 @@ class TestUI(object):
                 post_label = Label(row_value, text="POST:")
                 post_label.pack(side=LEFT)
                 add_button = Button(row_value, text="添加", width=5,
-                                    command=(lambda: self.add_value(value_frame, self._key_entry,
-                                                                    self._value_entry, self._value_del_button)))
-                self.add_value(value_frame, self._key_entry, self._value_entry, self._value_del_button)
+                                    command=(lambda: self.add_value(value_frame, self.mode_row)))
+                self.add_value(value_frame, self.mode_row)
                 add_button.pack(side=RIGHT)
+        else:
+            raise ValueError
 
     # 勾选HEADER触发
     # @param header_check 复选框的值
@@ -106,17 +111,15 @@ class TestUI(object):
                 post_label = Label(row_value, text="header:")
                 post_label.pack(side=LEFT)
                 add_button = Button(row_value, text="添加", width=5,
-                                    command=(lambda: self.add_value(header_frame, self._header_key,
-                                                                    self._header_value, self._header_del_button)))
-                self.add_value(header_frame, self._header_key, self._header_value, self._header_del_button)
+                                    command=(lambda: self.add_value(header_frame, self.header_row)))
+                self.add_value(header_frame, self.header_row)
                 add_button.pack(side=RIGHT)
 
     # 增加一行输入框
     # @param value_frame 增加一行的value_frame对象
-    # @param key_entry key值文本框对象的数组
-    # @param value_entry value值文本框对象的数组
-    # @param delete_button 删除按钮的对象的数组
-    def add_value(self, value_frame, key_entry, value_entry, delete_button):
+    # @param row 键、值文本框和删除按钮对象的元组
+    def add_value(self, value_frame, row):
+        key_entry, value_entry, delete_button = row
         row_value = Frame(value_frame)
         row_value.pack(side=TOP, fill=X)
         key_label = Label(row_value, text="key:")
@@ -134,22 +137,21 @@ class TestUI(object):
         delete_button.append(del_button)
         del_button.bind('<ButtonRelease>',
                         (lambda event: self.del_value(value_frame, event.widget,
-                                                      key_entry, value_entry, delete_button)))
-        self.button_disable(value_frame, key_entry, value_entry, delete_button)
+                                                      (key_entry, value_entry, delete_button))))
+        self.button_disable(value_frame, (key_entry, value_entry, delete_button))
 
     # 删除一行输入框
     # @param value_frame 删除一行的value_frame对象
     # @param button 触发此方法的删除按钮对象
-    # @param key_entry key值文本框对象的数组
-    # @param value_entry value值文本框对象的数组
-    # @param delete_button 删除按钮的对象的数组
-    def del_value(self, value_frame, button, key_entry, value_entry, delete_button):
+    # @param row 键、值文本框和删除按钮对象的元组
+    def del_value(self, value_frame, button, row):
+        key_entry, value_entry, delete_button = row
         for widget in button.master.children.values():
             widget in key_entry and key_entry.remove(widget)
             widget in value_entry and value_entry.remove(widget)
             widget in delete_button and delete_button.remove(widget)
         button.master.destroy()
-        self.button_disable(value_frame, key_entry, value_entry, delete_button)
+        self.button_disable(value_frame, (key_entry, value_entry, delete_button))
 
     # 删除一整块输入框
     # @param frame 删除所有输入框的frame
@@ -164,7 +166,7 @@ class TestUI(object):
             self._header_value.clear()
             self._header_del_button.clear()
         else:
-            return False
+            raise ValueError
         while 1:
             if frame.children:
                 frame.children.popitem()[1].destroy()
@@ -177,13 +179,14 @@ class TestUI(object):
     # @param key_entry key值文本框对象的数组
     # @param value_entry value值文本框对象的数组
     # @param delete_button 删除按钮的对象的数组
-    def button_disable(self, value_frame, key_entry, value_entry, delete_button):
+    def button_disable(self, value_frame, row):
+        key_entry, value_entry, delete_button = row
         if len(delete_button) > 1:
             for button in delete_button:
                 button.configure(state="normal")
                 button.bind('<ButtonRelease>',
                             (lambda event: self.del_value(value_frame, event.widget,
-                                                          key_entry, value_entry, delete_button)))
+                                                          (key_entry, value_entry, delete_button))))
         else:
             delete_button[0].configure(state="disabled")
             # 如果不解绑的话，就算禁用也是可以点击。使用按钮的command参数无法返回是哪个按钮点击的。
