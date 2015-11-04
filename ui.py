@@ -88,7 +88,6 @@ class TestUI(object):
         elif self._mode_value == 'POST':
             if not value_frame.children:
                 self.add_all_value(value_frame, "POST:", self.mode_row)
-                self.add_value(value_frame, self.mode_row)
         else:
             raise ValueError
 
@@ -102,7 +101,6 @@ class TestUI(object):
         elif self._header_check == 1:
             if not header_frame.children:
                 self.add_all_value(header_frame, "HEADER:", self.header_row)
-                self.add_value(header_frame, self.header_row)
 
     # 增加一行输入框
     # @param value_frame 增加一行的value_frame对象
@@ -153,6 +151,7 @@ class TestUI(object):
         post_label.pack(side=LEFT)
         add_button = Button(row_value, text="添加", width=5, command=(lambda: self.add_value(frame, row)))
         add_button.pack(side=RIGHT)
+        self.add_value(frame, row)
 
     # 删除一整块输入框
     # @param frame 删除所有输入框的frame
