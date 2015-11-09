@@ -43,7 +43,7 @@ class CrawlerUI(ui.TestUI):
                                           "2.HEADER中不允许有中文字符\n")
         elif dict_result['error'] == 2:
             self._header_text.insert(END, "致命错误：解析出错\n"
-                                          "1.无法解析返回的状态")
+                                          "1.无法解析返回的状态\n")
         elif dict_result['error'] == 99:
             self._header_text.insert(END, "致命错误：程序出错\n")
         self.insert_text(dict_result)
