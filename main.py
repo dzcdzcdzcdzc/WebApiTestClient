@@ -31,8 +31,12 @@ class CrawlerUI(ui.TestUI):
             raise ValueError
         self.result(dict_result)
 
-    # 写入结果到UI
     def result(self, dict_result):
+        """
+        写入结果到UI
+        :param dict_result 需要写入的信息:
+        :return:
+        """
         self.clear_text()
         if dict_result['error'] == 0:
             pass
@@ -48,18 +52,30 @@ class CrawlerUI(ui.TestUI):
             self._header_text.insert(END, "致命错误：程序出错\n")
         self.insert_text(dict_result)
 
-    # 传入key和value的text对象获取字典值
     @staticmethod
     def get_dict(key, value):
+        """
+        传入key和value的text对象获取字典值
+        :param key key值对象的list:
+        :param value value值对象的list:
+        :return key和value匹配的字典:
+        """
         return dict(zip(map(lambda k: k.get(), key), map(lambda k: k.get(), value)))
 
-    # 清除文本框内容
     def clear_text(self):
+        """
+        清除文本框内容
+        :return None:
+        """
         self._header_text.delete("1.0", END)
         self._body_text.delete("1.0", END)
 
-    # 插入文本框内容
     def insert_text(self, info):
+        """
+        插入文本框内容
+        :param info 写入文本框的内容:
+        :return None:
+        """
         self._header_text.insert(END, info['info'])
         self._header_text.insert(END, info['msg'] + "\n")
         self._header_text.insert(END, info['errmsg'] + "\n")

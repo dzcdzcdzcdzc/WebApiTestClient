@@ -14,11 +14,13 @@ class Test(object):
     # 网页编码
     code = 'utf-8'
 
-    # get请求
-    # @param get_url get请求地址
-    # @param header header头
-    # @param timeout 超时时间
     def get(self, get_url, header):
+        """
+        get请求
+        :param get_url get请求地址:
+        :param header header头:
+        :return 获得错误编号和信息:
+        """
         data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
             req = urllib.request.Request(self.quote_url(get_url))
@@ -36,12 +38,14 @@ class Test(object):
             data['errmsg'] = str(e)
         return data
 
-    # post请求
-    # @param get_url post请求地址
-    # @param post post内容
-    # @param header header头
-    # @param timeout 超时时间
     def post(self, post_url, post, header):
+        """
+        post请求
+        :param post_url post请求地址:
+        :param post post内容:
+        :param header header头:
+        :return 获得错误编号和信息:
+        """
         data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
             data['error'] = 0
@@ -62,10 +66,13 @@ class Test(object):
             data['errmsg'] = str(e)
         return data
 
-    # 发送请求
-    # @param 信息内容
-    # @param 请求类型、内容
     def request(self, data, req):
+        """
+        发送请求
+        :param data 信息内容:
+        :param req 请求类型、内容:
+        :return 获得错误编号和信息:
+        """
         with urllib.request.urlopen(req) as urlopen:
             # 发送包的头文件
             data['info'] = "发送包的头文件：\n"
@@ -78,9 +85,12 @@ class Test(object):
             data['read'], data['msg'], data['errmsg'] = self.decode_json(data['read'])
         return data
 
-    # 转换url中的中文字符
-    # @param quote_url 转换字符
     def quote_url(self, quote_url):
+        """
+        转换url中的中文字符
+        :param quote_url 要转换字符:
+        :return 转换后的字符:
+        """
         # 保护url中的://不被转换
         quote_url = quote_url.split("//", 1)
         if len(quote_url) == 2:
@@ -94,6 +104,12 @@ class Test(object):
     # @param word 过滤文字
     @staticmethod
     def filter(word, msg):
+        """
+        去除网页中的开头的bom和结尾的回车空格
+        :param word 过滤文字:
+        :param msg 需要附加的信息:
+        :return 过滤后的文字和附加完成的信息:
+        """
         r = re.compile(r"^\s+")
         if re.search(r, word) is not None:
             msg += "网页开头含有非空字符\n"
@@ -104,8 +120,12 @@ class Test(object):
             word = re.sub(r, "", word)
         return word, msg
 
-    # 解析json字符串
     def decode_json(self, read):
+        """
+        解析json字符串
+        :param read 需要解析json的字符串:
+        :return 解析后的字符串和其他信息:
+        """
         msg = ""
         errmsg = ""
         try:
