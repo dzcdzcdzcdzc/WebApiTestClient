@@ -13,7 +13,7 @@ ubuntu默认需安装tkinter，需运行apt-get install python3-tk -y
 
 windows环境下，启动时不希望已最大化方式打开，就删除main.py倒数第二、第三行的
 
-    if sys == "Windows":
+    if platform.system() == "Windows":
         root.wm_state('zoomed')
 
 使用时将main.py重命名成main.pyw，启动时不会出现console。
@@ -40,7 +40,6 @@ win7:
 ![win7](https://github.com/dzcdzcdzcdzc/WebApiTestClient/raw/master/images/win7.jpg)
 
 ## 未来
- - 提交请求时会造成短暂的阻塞，计划使用协程解决。届时或许不再支持python3.3
  - 加入更多请求功能
 
 ## 许可

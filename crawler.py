@@ -5,8 +5,6 @@ import urllib.error
 import json
 import re
 
-__author__ = 'zhichen.dai'
-
 
 class Test(object):
     # 不将网址之中的以下字符转换，至少要有 ?=&
@@ -17,9 +15,9 @@ class Test(object):
     def get(self, get_url, header):
         """
         get请求
-        :param get_url get请求地址:
-        :param header header头:
-        :return 获得错误编号和信息:
+        :param get_url: get请求地址
+        :param header: header头
+        :return:获得错误编号和信息
         """
         data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
@@ -33,6 +31,9 @@ class Test(object):
         except http.client.BadStatusLine as e:
             data['error'] = 2
             data['read'] = '' if str(e) == "''" else str(e)
+        except http.client.InvalidURL as e:
+            data['error'] = 3
+            data['errmsg'] = str(e)
         except Exception as e:
             data['error'] = 99
             data['errmsg'] = str(e)
@@ -41,14 +42,13 @@ class Test(object):
     def post(self, post_url, post, header):
         """
         post请求
-        :param post_url post请求地址:
-        :param post post内容:
-        :param header header头:
-        :return 获得错误编号和信息:
+        :param post_url: post请求地址
+        :param post: post内容
+        :param header: header头
+        :return:获得错误编号和信息
         """
         data = {'error': 0, 'msg': '', 'errmsg': '', 'read': '', 'info': ''}
         try:
-            data['error'] = 0
             post = urllib.parse.urlencode(post)
             post = post.encode('utf-8')
             req = urllib.request.Request(self.quote_url(post_url), data=post, method='POST')
@@ -61,6 +61,9 @@ class Test(object):
         except http.client.BadStatusLine as e:
             data['error'] = 2
             data['read'] = '' if str(e) == "''" else str(e)
+        except http.client.InvalidURL as e:
+            data['error'] = 3
+            data['read'] = str(e)
         except Exception as e:
             data['error'] = 99
             data['errmsg'] = str(e)
@@ -69,9 +72,9 @@ class Test(object):
     def request(self, data, req):
         """
         发送请求
-        :param data 信息内容:
-        :param req 请求类型、内容:
-        :return 获得错误编号和信息:
+        :param data: 信息内容
+        :param req: 请求类型、内容
+        :return:获得错误编号和信息
         """
         with urllib.request.urlopen(req) as urlopen:
             # 发送包的头文件
@@ -88,8 +91,8 @@ class Test(object):
     def quote_url(self, quote_url):
         """
         转换url中的中文字符
-        :param quote_url 要转换字符:
-        :return 转换后的字符:
+        :param quote_url: 要转换字符
+        :return:转换后的字符
         """
         # 保护url中的://不被转换
         quote_url = quote_url.split("//", 1)
@@ -106,9 +109,9 @@ class Test(object):
     def filter(word, msg):
         """
         去除网页中的开头的bom和结尾的回车空格
-        :param word 过滤文字:
-        :param msg 需要附加的信息:
-        :return 过滤后的文字和附加完成的信息:
+        :param word: 过滤文字
+        :param msg: 需要附加的信息
+        :return:过滤后的文字和附加完成的信息
         """
         r = re.compile(r"^\s+")
         if re.search(r, word) is not None:
@@ -123,8 +126,8 @@ class Test(object):
     def decode_json(self, read):
         """
         解析json字符串
-        :param read 需要解析json的字符串:
-        :return 解析后的字符串和其他信息:
+        :param read: 需要解析json的字符串
+        :return:解析后的字符串和其他信息
         """
         msg = ""
         errmsg = ""
@@ -141,13 +144,13 @@ class Test(object):
             # 转换成json，能解析一定能转换
             read = json.dumps(read, ensure_ascii=False, indent=4)
         except UnicodeDecodeError as e:
-            msg += "网页编码转换" + self.code + "时失败，输出源编码"
+            msg += "网页编码转换" + self.code + "时失败，输出源编码\n"
             errmsg = e
         except ValueError as e:
-            msg += "解析json出错，输出原内容。"
+            msg += "解析json出错，输出原内容。\n"
             errmsg = e
         except Exception as e:
-            msg += "解析原网页，出现非致命错误："
+            msg += "解析原网页，出现非致命错误：\n"
             errmsg = e
         return read, msg, str(errmsg)
 

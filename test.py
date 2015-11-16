@@ -3,7 +3,6 @@ import json
 import re
 import crawler
 
-__author__ = 'zhichen.dai'
 
 # 准备正则表达式
 r = re.compile(r"^Python-urllib/3\.[0-9]$")

@@ -27,6 +27,8 @@ class TestUI(object):
     header_row = (_header_key, _header_value, _header_del_button)
     # url文本框对象
     _url_entry = object
+    # 提交按钮对象
+    _submit_button = object
     # 下方左边文本框对象
     _header_text = object
     # 下方右边文本框对象
@@ -76,8 +78,8 @@ class TestUI(object):
                              command=(lambda: self.header_change(header_check.get(), header_frame)))
         submit_frame.pack(side=TOP, fill=X)
         header.pack(side=LEFT)
-        submit_button = Button(submit_frame, text="提交", width=10, command=(lambda: self.submit()))
-        submit_button.pack(side=RIGHT)
+        self._submit_button = Button(submit_frame, text="提交", width=10, command=(lambda: self.submit()))
+        self._submit_button.pack(side=RIGHT)
         # 动作
         mode.bind('<<ComboboxSelected>>', (lambda event: self.mode_change(mode.get(), value_frame)))
 

@@ -1,4 +1,5 @@
 <?php
+sleep(5);
 $data['GET'] = $_GET;
 $data['POST'] = $_POST;
 $data['COOKIE'] = $_COOKIE;
