@@ -19,7 +19,7 @@ before_script:
   - sudo service apache2 restart
 script:
   - python test.py
-  - coverage run --omit=test.py .\test.py
+  - coverage run --omit=test.py test.py
 after_success:
   - coveralls
 notifications:
