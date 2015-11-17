@@ -153,14 +153,3 @@ class Test(object):
             msg += "解析原网页，出现非致命错误：\n"
             errmsg = e
         return read, msg, str(errmsg)
-
-
-if __name__ == '__main__':
-    Test = Test()
-    url = "http://localhost/work/phptext/error.php?id=1&name=的"
-    post_data = {'int': 1, 'str': 'string'}
-    a = Test.post(url, post_data, {})
-    if a['error'] == 0:
-        print(a['read'] + "\n", "msg\n" + a['msg'] + "\n", "err\n" + a['errmsg'] + "\n")
-    else:
-        print(a['errmsg'])

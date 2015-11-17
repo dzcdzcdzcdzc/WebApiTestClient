@@ -11,12 +11,16 @@ before_install:
   - sudo apt-get install python3-tk -y
   - sudo apt-get install apache2 -y
   - sudo apt-get install php5 -y
-install: true
+install: 
+  - pip install coveralls
 before_script:
   - sudo cp -f test/travis-ci-apache /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)/test?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 restart
 script:
   - python test.py
+  - coverage run --omit=test.py .\test.py
+after_success:
+  - coveralls
 notifications:
     email: false

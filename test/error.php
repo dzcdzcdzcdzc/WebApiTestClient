@@ -1,4 +1,5 @@
-﻿<?php
+﻿
+ <?php
 $data['GET'] = $_GET;
 $data['POST'] = $_POST;
 $data['COOKIE'] = $_COOKIE;
@@ -9,5 +10,4 @@ foreach ($_SERVER as $k => $v) {
     }
 }
 echo json_encode($data);
-?>
-
+?> 
