@@ -66,7 +66,7 @@ class CrawlerUI(ui.TestUI):
             self._header_text.insert(END, "错误：连接出错\n"
                                           "1.检查输入的地址是否正确\n"
                                           "2.检查输入的POST是否正确\n"
-                                          "2.HEADER中不允许有中文字符\n")
+                                          "3.HEADER中不允许有中文字符\n")
         elif dict_result['error'] == 2:
             self._header_text.insert(END, "错误：解析出错\n"
                                           "1.无法解析返回的状态\n")
